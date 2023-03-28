@@ -49,6 +49,11 @@ conda create -n pixel-env python=3.9
 conda activate pixel-env
 ```
 
+2'.
+```
+brew install cairo pkg-config
+```
+
 3. Install Python packages
 ```bash
 conda install pytorch torchvision cudatoolkit=11.3 -c pytorch
