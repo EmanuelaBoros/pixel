@@ -118,6 +118,8 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=1) -> L
         words = []
         labels = []
         for line in f:
+            if 'TOKEN   NE' in line:
+                continue
             if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ')\
                     or 'TOKEN   NE' in line or 'EnfOfSentence' in line:
                 if words:
@@ -141,6 +143,8 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=1) -> L
 def write_predictions_to_file(writer: TextIO, test_input_reader: TextIO, preds_list: List):
     example_id = 0
     for line in test_input_reader:
+        if 'TOKEN   NE' in line:
+            continue
         if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ') \
                 or 'TOKEN   NE' in line or 'EnfOfSentence' in line:
             writer.write(line)
