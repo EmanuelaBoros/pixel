@@ -118,7 +118,8 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=1) -> L
         words = []
         labels = []
         for line in f:
-            if 'TOKEN   NE' in line:
+            #import pdb;pdb.set_trace()
+            if 'NE-COARSE' in line:
                 continue
             if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ')\
                     or 'TOKEN   NE' in line or 'EnfOfSentence' in line:
@@ -143,7 +144,8 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=1) -> L
 def write_predictions_to_file(writer: TextIO, test_input_reader: TextIO, preds_list: List):
     example_id = 0
     for line in test_input_reader:
-        if 'TOKEN   NE' in line:
+        
+        if 'NE-COARSE' in line:
             continue
         if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ') \
                 or 'TOKEN   NE' in line or 'EnfOfSentence' in line:
@@ -168,7 +170,7 @@ def get_labels(path: str) -> List[str]:
         # Use MasakhaNER labels
         # https://github.com/masakhane-io/masakhane-ner
         # return ["O", "B-DATE", "I-DATE", "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC"]
-        return ["O", "B-time", "I-time", "B-pers", "I-pers", "B-org", "I-org", "B-loc", "I-loc"]
+        return ["O", "B-time", "I-time", "B-prod", "I-prod", "B-pers", "I-pers", "B-org", "I-org", "B-loc", "I-loc"]
 
 
 def get_examples_to_features_fn(modality: Modality):
