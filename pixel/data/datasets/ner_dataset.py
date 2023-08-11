@@ -108,7 +108,7 @@ if is_torch_available():
             return self.features[i]
 
 
-def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=-1) -> List[NERInputExample]:
+def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=1) -> List[NERInputExample]:
     if isinstance(mode, Split):
         mode = mode.value
     file_path = os.path.join(data_dir, f"{mode}.txt")
@@ -119,7 +119,7 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=-1) -> 
         labels = []
         for line in f:
             if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ')\
-                    or 'TOKEN   NE' in line:
+                    or 'TOKEN   NE' in line or 'EnfOfSentence' in line:
                 if words:
                     examples.append(NERInputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
                     guid_index += 1
@@ -142,7 +142,7 @@ def write_predictions_to_file(writer: TextIO, test_input_reader: TextIO, preds_l
     example_id = 0
     for line in test_input_reader:
         if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ') \
-                or 'TOKEN   NE' in line:
+                or 'TOKEN   NE' in line or 'EnfOfSentence' in line:
             writer.write(line)
             if not preds_list[example_id]:
                 example_id += 1
