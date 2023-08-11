@@ -14,13 +14,18 @@ from transformers.file_utils import (
     PushToHubMixin,
     RepositoryNotFoundError,
     RevisionNotFoundError,
-    cached_path,
+    # cached_path,
     copy_func,
-    hf_bucket_url,
     is_offline_mode,
-    is_remote_url,
+    # is_remote_url,
 )
+from huggingface_hub import hf_hub_url
+from urllib.parse import urlparse
+def is_remote_url(url_or_filename):
+    parsed = urlparse(url_or_filename)
+    return parsed.scheme in ("http", "https")
 
+from transformers.utils.hub import cached_file as cached_path
 logger = logging.getLogger(__name__)
 
 TEXT_RENDERER_NAME = "text_renderer_config.json"
@@ -234,14 +239,16 @@ class TextRenderingMixin(PushToHubMixin):
         elif os.path.isfile(pretrained_model_name_or_path) or is_remote_url(pretrained_model_name_or_path):
             text_renderer_file = pretrained_model_name_or_path
         else:
-            text_renderer_file = hf_bucket_url(
-                pretrained_model_name_or_path, filename=TEXT_RENDERER_NAME, revision=revision, mirror=None
-            )
+            text_renderer_file = hf_hub_url(
+                pretrained_model_name_or_path, filename=TEXT_RENDERER_NAME, revision=revision)#, mirror=None
+            # )
 
         try:
+            text_renderer_file = text_renderer_file.split('/')[-1]
             # Load from URL or cache if already cached
             resolved_text_renderer_file = cached_path(
-                text_renderer_file,
+                pretrained_model_name_or_path,
+                filename=text_renderer_file,
                 cache_dir=cache_dir,
                 force_download=force_download,
                 proxies=proxies,
@@ -347,14 +354,16 @@ class TextRenderingMixin(PushToHubMixin):
         elif os.path.isfile(pretrained_model_name_or_path) or is_remote_url(pretrained_model_name_or_path):
             font_file = pretrained_model_name_or_path
         else:
-            font_file = hf_bucket_url(
-                pretrained_model_name_or_path, filename=font_file_name, revision=revision, mirror=None
-            )
+            font_file = hf_hub_url(
+                pretrained_model_name_or_path, filename=font_file_name, revision=revision)#, mirror=None
+            # )
 
         try:
+            font_file = font_file.split('/')[-1]
             # Load from URL or cache if already cached
             resolved_font_file = cached_path(
-                font_file,
+                pretrained_model_name_or_path,
+                filename=font_file,
                 cache_dir=cache_dir,
                 force_download=force_download,
                 proxies=proxies,
