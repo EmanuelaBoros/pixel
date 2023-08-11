@@ -153,8 +153,6 @@ def write_predictions_to_file(writer: TextIO, test_input_reader: TextIO, preds_l
             logger.warning("Maximum sequence length exceeded: No prediction for '%s'.", line.split()[0])
 
 
-
-# update
 def get_labels(path: str) -> List[str]:
     if path:
         with open(path, "r") as f:
