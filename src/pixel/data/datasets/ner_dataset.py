@@ -118,14 +118,15 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=-1) -> 
         words = []
         labels = []
         for line in f:
-            if line.startswith("-DOCSTART-") or line == "" or line == "\n":
+            if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ')\
+                    or 'TOKEN   NE' in line:
                 if words:
                     examples.append(NERInputExample(guid=f"{mode}-{guid_index}", words=words, labels=labels))
                     guid_index += 1
                     words = []
                     labels = []
             else:
-                splits = line.split(" ")
+                splits = line.split()
                 words.append(splits[0])
                 if len(splits) > 1:
                     labels.append(splits[label_idx].replace("\n", ""))
@@ -140,7 +141,8 @@ def read_examples_from_file(data_dir, mode: Union[Split, str], label_idx=-1) -> 
 def write_predictions_to_file(writer: TextIO, test_input_reader: TextIO, preds_list: List):
     example_id = 0
     for line in test_input_reader:
-        if line.startswith("-DOCSTART-") or line == "" or line == "\n":
+        if line.startswith("-DOCSTART-") or line == "" or line == "\n" or line.startswith('# ') \
+                or 'TOKEN   NE' in line:
             writer.write(line)
             if not preds_list[example_id]:
                 example_id += 1
@@ -161,7 +163,8 @@ def get_labels(path: str) -> List[str]:
     else:
         # Use MasakhaNER labels
         # https://github.com/masakhane-io/masakhane-ner
-        return ["O", "B-DATE", "I-DATE", "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC"]
+        # return ["O", "B-DATE", "I-DATE", "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC"]
+        return ["O", "B-time", "I-time", "B-pers", "I-pers", "B-org", "I-org", "B-loc", "I-loc"]
 
 
 def get_examples_to_features_fn(modality: Modality):
