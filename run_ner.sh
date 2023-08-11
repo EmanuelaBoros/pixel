@@ -4,8 +4,13 @@ export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7
 export WANDB_PROJECT="pixel-experiments"
 
 # Settings
-export LANG="conll_2003_en"
-export DATA_DIR="data/masakhane-ner/data/${LANG}"
+
+export LANG="hipe2022"
+#export LANG="conll_2003_en"
+
+export DATA_DIR="data/${LANG}"
+#export DATA_DIR="data/masakhane-ner/data/${LANG}"
+
 export FALLBACK_FONTS_DIR="data/fonts"  # let's say this is where we downloaded the fonts to
 export MODEL="Team-PIXEL/pixel-base" # also works with "bert-base-cased", "roberta-base", etc.
 export SEQ_LEN=196
