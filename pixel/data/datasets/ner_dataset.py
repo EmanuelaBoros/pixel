@@ -170,7 +170,7 @@ def get_labels(path: str) -> List[str]:
         # Use MasakhaNER labels
         # https://github.com/masakhane-io/masakhane-ner
         # return ["O", "B-DATE", "I-DATE", "B-PER", "I-PER", "B-ORG", "I-ORG", "B-LOC", "I-LOC"]
-        return ["O", "B-time", "I-time", "B-pers", "I-pers", "B-org", "I-org", "B-loc", "I-loc"]
+        return ["O", "B-time", "I-time", "B-prod", "I-prod", "B-pers", "I-pers", "B-org", "I-org", "B-loc", "I-loc"]
 
 
 def get_examples_to_features_fn(modality: Modality):
