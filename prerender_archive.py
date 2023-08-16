@@ -18,6 +18,13 @@ from pixel import PyGameTextRenderer, log_example_while_rendering, push_rendered
 logger = logging.getLogger(__name__)
 import glob
 import time
+import string
+
+def tokenize(text):
+    # print(text)
+    for punctuation in string.punctuation:
+        text = text.replace(punctuation, ' ' + punctuation + ' ')
+    return text.split()
 
 def main(args: argparse.Namespace):
     # Load PyGame renderer
@@ -57,21 +64,23 @@ def main(args: argparse.Namespace):
                 data = json.loads(line)
                 book_data.append(data)
 
-        num_examples = idx
-        import pdb;
-        pdb.set_trace()
-        num_words = dataset_stats["total_num_words"]
+        num_examples = len(book_data) #idx
 
-        logger.info(f"{book_id}: {book['title']}, {target_seq_length=}px, {num_examples=}, {num_words=}")
+        # import pdb;
+        # pdb.set_trace()
+        # num_words = dataset_stats["total_num_words"]
 
-        book_text = book["text"].split("\n")
+        logger.info(f"{book_id}: {target_seq_length=}px, {num_examples}")
 
+        # book_text = book["text"].split("\n")
+        num_words = 0
         width = 0
         block = []
-        for line in book_text:
+        for line in book_data:
             line = line.strip()
             if line:
-                dataset_stats["total_num_words"] += len(line.split(" "))
+                tokens = tokenize(line)
+                dataset_stats["total_num_words"] += len(tokens)
 
                 line_width = text_renderer.font.get_rect(line).width
                 if width + line_width >= target_seq_length:
@@ -107,7 +116,7 @@ def main(args: argparse.Namespace):
                 dataset_stats = push_rendered_chunk_to_hub(args, data, dataset_stats, idx)
                 data = {"pixel_values": [], "num_patches": []}
 
-    logger.info(f"Total num words in bookcorpus: {dataset_stats['total_num_words']}")
+    logger.info(f"Total num words in archives: {dataset_stats['total_num_words']}")
 
 
 if __name__ == "__main__":
