@@ -61,8 +61,8 @@ def main(args: argparse.Namespace):
         book_data = []
         with bz2.open(book, 'rt') as file:
             for line in file:
-                data = json.loads(line)
-                book_data.append(data)
+                line = json.loads(line)
+                book_data.append(line)
 
         num_examples = len(book_data) #idx
 
