@@ -8,6 +8,8 @@ Relies on a modified version of the datasets library installed through git submo
 import argparse
 import logging
 import sys
+import bz2
+import json
 
 from datasets import load_dataset
 from PIL import Image
@@ -31,7 +33,7 @@ def main(args: argparse.Namespace):
         "total_num_words": 0,
     }
 
-    bookcorpus = load_dataset("bookcorpusopen", split="train", streaming=True)
+    # bookcorpus = load_dataset("bookcorpusopen", split="train", streaming=True)
 
     path = f"../canonical-rebuilt-release-evenized-light/pixel/*.jsonl.bz2"
 
@@ -42,12 +44,18 @@ def main(args: argparse.Namespace):
     logger.info(
         f'Number of files: {len(files)}. Time taken to read files: {time.time() - file_time_start}')
 
-
-
     max_pixels = text_renderer.pixels_per_patch * text_renderer.max_seq_length - 2 * text_renderer.pixels_per_patch
     target_seq_length = max_pixels
+
+
     idx = 0
     for book_id, book in enumerate(files):
+
+        book_data = []
+        with bz2.open('your_file.jsonl.bz2', 'rt') as file:
+            for line in file:
+                data = json.loads(line)
+                book_data.append(data)
 
         num_examples = idx
         import pdb;
