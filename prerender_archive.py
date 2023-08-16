@@ -52,7 +52,7 @@ def main(args: argparse.Namespace):
     for book_id, book in enumerate(files):
 
         book_data = []
-        with bz2.open('your_file.jsonl.bz2', 'rt') as file:
+        with bz2.open(book, 'rt') as file:
             for line in file:
                 data = json.loads(line)
                 book_data.append(data)
