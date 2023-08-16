@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 import glob
 import time
 import string
+from tqdm import tqdm
 
 def tokenize(text):
     # print(text)
@@ -76,7 +77,7 @@ def main(args: argparse.Namespace):
         num_words = 0
         width = 0
         block = []
-        for line in book_data:
+        for line in tqdm(book_data, total=len(book_data)):
             if 'ft' in line:
                 line = line['ft'].strip()
                 if line:
