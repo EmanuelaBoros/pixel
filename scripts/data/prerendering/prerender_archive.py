@@ -14,7 +14,8 @@ from PIL import Image
 from pixel import PyGameTextRenderer, log_example_while_rendering, push_rendered_chunk_to_hub
 
 logger = logging.getLogger(__name__)
-
+import glob
+import time
 
 def main(args: argparse.Namespace):
     # Load PyGame renderer
@@ -31,6 +32,16 @@ def main(args: argparse.Namespace):
     }
 
     bookcorpus = load_dataset("bookcorpusopen", split="train", streaming=True)
+
+    path = f"../canonical-rebuilt-release-evenized-light/pixel/*.jsonl.bz2"
+
+
+    logger.info(f"Indexing files in {path}")
+    file_time_start = time.time()
+    files = glob.glob(path)
+    logger.info(
+        f'Number of files: {len(files)}. Time taken to read files: {time.time() - file_time_start}')
+
     import pdb;pdb.set_trace()
 
     max_pixels = text_renderer.pixels_per_patch * text_renderer.max_seq_length - 2 * text_renderer.pixels_per_patch
