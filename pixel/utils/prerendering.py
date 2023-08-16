@@ -48,7 +48,7 @@ def push_rendered_chunk_to_hub(
     logger.info(f"Current num words = {dataset_stats['total_num_words']}\n")
 
     chunk_dataset = datasets.Dataset.from_dict(chunk)
-    new_uploaded_size, new_dataset_nbytes, new_num_shards = chunk_dataset.push_to_hub(
+    chunk_dataset.push_to_hub(
         repo_id=args.repo_id,
         split=args.split,
         private=True,
@@ -63,9 +63,9 @@ def push_rendered_chunk_to_hub(
 
     dataset_stats.update(
         {
-            "total_uploaded_size": new_uploaded_size,
-            "total_dataset_nbytes": new_dataset_nbytes,
-            "total_num_shards": dataset_stats["total_num_shards"] + new_num_shards,
+            "total_uploaded_size": 0,
+            "total_dataset_nbytes": 0,
+            "total_num_shards": dataset_stats["total_num_shards"] + 0,
             "total_num_examples": current_num_examples,
         }
     )
