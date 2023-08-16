@@ -77,7 +77,7 @@ def main(args: argparse.Namespace):
         width = 0
         block = []
         for line in book_data:
-            line = line.strip()
+            line = line['ft'].strip()
             if line:
                 tokens = tokenize(line)
                 dataset_stats["total_num_words"] += len(tokens)
