@@ -55,10 +55,10 @@ def push_rendered_chunk_to_hub(
         token=args.auth_token,
         branch="main",
         embed_external_files=True,
-        existing_uploaded_size=dataset_stats["total_uploaded_size"],
-        existing_nbytes=dataset_stats["total_dataset_nbytes"],
-        existing_nshards=dataset_stats["total_num_shards"],
-        num_examples=current_num_examples,
+        # existing_uploaded_size=dataset_stats["total_uploaded_size"],
+        # existing_nbytes=dataset_stats["total_dataset_nbytes"],
+        # existing_nshards=dataset_stats["total_num_shards"],
+        # num_examples=current_num_examples,
     )
 
     dataset_stats.update(

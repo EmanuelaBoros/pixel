@@ -93,7 +93,7 @@ def main(args: argparse.Namespace):
                         encoding = text_renderer(text=sequence)
 
                         image = Image.fromarray(encoding.pixel_values)
-                        image.save("images/output_{id_line}.png")
+                        image.save(f"images/output_{id_line}.png")
 
                         data["pixel_values"].append(image)
                         data["num_patches"].append(encoding.num_text_patches)
