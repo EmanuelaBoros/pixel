@@ -77,7 +77,7 @@ def main(args: argparse.Namespace):
         num_words = 0
         width = 0
         block = []
-        for line in tqdm(book_data, total=len(book_data)):
+        for id_line, line in tqdm(enumerate(book_data), total=len(book_data)):
             if 'ft' in line:
                 line = line['ft'].strip()
                 if line:
@@ -87,11 +87,15 @@ def main(args: argparse.Namespace):
                     line_width = text_renderer.font.get_rect(line).width
                     if width + line_width >= target_seq_length:
                         idx += 1
+                        logger.info(f"{idx}")
                         sequence = " ".join(block)
 
                         encoding = text_renderer(text=sequence)
 
-                        data["pixel_values"].append(Image.fromarray(encoding.pixel_values))
+                        image = Image.fromarray(encoding.pixel_values)
+                        image.save("images/output_{id_line}.png")
+
+                        data["pixel_values"].append(image)
                         data["num_patches"].append(encoding.num_text_patches)
 
                         if idx % args.chunk_size == 0:
