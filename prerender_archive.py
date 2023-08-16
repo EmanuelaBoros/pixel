@@ -77,31 +77,32 @@ def main(args: argparse.Namespace):
         width = 0
         block = []
         for line in book_data:
-            line = line['ft'].strip()
-            if line:
-                tokens = tokenize(line)
-                dataset_stats["total_num_words"] += len(tokens)
+            if 'ft' in line:
+                line = line['ft'].strip()
+                if line:
+                    tokens = tokenize(line)
+                    dataset_stats["total_num_words"] += len(tokens)
 
-                line_width = text_renderer.font.get_rect(line).width
-                if width + line_width >= target_seq_length:
-                    idx += 1
-                    sequence = " ".join(block)
+                    line_width = text_renderer.font.get_rect(line).width
+                    if width + line_width >= target_seq_length:
+                        idx += 1
+                        sequence = " ".join(block)
 
-                    encoding = text_renderer(text=sequence)
+                        encoding = text_renderer(text=sequence)
 
-                    data["pixel_values"].append(Image.fromarray(encoding.pixel_values))
-                    data["num_patches"].append(encoding.num_text_patches)
+                        data["pixel_values"].append(Image.fromarray(encoding.pixel_values))
+                        data["num_patches"].append(encoding.num_text_patches)
 
-                    if idx % args.chunk_size == 0:
-                        log_example_while_rendering(idx, sequence, encoding.num_text_patches)
-                        dataset_stats = push_rendered_chunk_to_hub(args, data, dataset_stats, idx)
-                        data = {"pixel_values": [], "num_patches": []}
+                        if idx % args.chunk_size == 0:
+                            log_example_while_rendering(idx, sequence, encoding.num_text_patches)
+                            dataset_stats = push_rendered_chunk_to_hub(args, data, dataset_stats, idx)
+                            data = {"pixel_values": [], "num_patches": []}
 
-                    width = line_width
-                    block = [line]
-                else:
-                    block.append(line)
-                    width += line_width
+                        width = line_width
+                        block = [line]
+                    else:
+                        block.append(line)
+                        width += line_width
 
         if len(block) > 0:
             idx += 1
