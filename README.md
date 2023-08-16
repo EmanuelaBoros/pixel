@@ -214,3 +214,15 @@ Feel free to open an issue here or send an email to ask questions about PIXEL or
 Phillip Rust (p.rust@di.ku.dk)
 
 If you find this repo useful, we would also be happy about a ⭐️ :).
+
+## Problems:
+
+```
+python3.11/site-packages/gi/__init__.py", line 40, in <module>
+    from . import _gi
+ImportError: /lib/x86_64-linux-gnu/libgobject-2.0.so.0: undefined symbol: ffi_type_uint32, version LIBFFI_BASE_7.0
+```
+
+Solution:
+`export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7`
+ 
