@@ -85,15 +85,24 @@ class DataTrainingArguments:
 
     def __post_init__(self):
         self.train_dataset_names = self.train_dataset_names.split(",")
+        logging.info(self.train_dataset_names)
+
         self.train_splits = self.train_splits.split(",")
+        logging.info(self.train_splits)
+
         if self.train_dataset_configs:
             self.train_dataset_configs = self.train_dataset_configs.split(",")
         else:
             self.train_dataset_configs = [None] * len(self.train_dataset_names)
+        logging.info(self.train_dataset_configs)
+
         if self.dataset_caches:
             self.dataset_caches = self.dataset_caches.split(",")
         else:
             self.dataset_caches = [None] * len(self.train_dataset_names)
+        logging.info(self.dataset_caches)
+
+
         assert (
             len(self.train_dataset_names)
             == len(self.train_splits)
@@ -227,7 +236,6 @@ def main(config_dict: Dict[str, Any] = None):
 
     logging.info(type(config_dict))
 
-
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, CustomTrainingArguments))
     if not config_dict:
         if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
@@ -237,7 +245,7 @@ def main(config_dict: Dict[str, Any] = None):
         else:
             model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     else:
-        logging.info(config_dict)
+        logging.info(config_dict, type(config_dict))
         model_args, data_args, training_args = parser.parse_dict(config_dict)
 
     logger.setLevel(log_level)
