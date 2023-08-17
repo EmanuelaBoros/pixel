@@ -1,7 +1,7 @@
 
-    "train_dataset_names": "Team-PIXEL/rendered-bookcorpus,Team-PIXEL/rendered-wikipedia-english",
+    "train_dataset_names": "Team-PIXEL/rendered-bookcorpus",
     "validation_dataset_name": "plip/wiki_dev",
-    "dataset_cache": "data/rendered-bookcorpus,data/rendered-wikipedia-en",
+    "dataset_cache": "data/rendered-bookcorpus",
     "train_splits": "train,train",
     "validation_split": "en",
     "label_names": "pixel_values",
@@ -29,7 +29,7 @@
     "streaming": false,
     "report_to": "wandb",
     "push_to_hub": true,
-    "hub_model_id": "Team-PIXEL/pixel-base",
+    "hub_model_id": "emanuelaboros/pixel-base",
     "hub_strategy": "checkpoint",
     "hub_token": "<redacted_token_with_write_access>",
     "hub_private_repo": true
