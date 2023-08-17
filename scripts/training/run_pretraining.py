@@ -245,7 +245,7 @@ def main(config_dict: Dict[str, Any] = None):
         else:
             model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     else:
-        logging.info(config_dict, type(config_dict))
+        # logging.info(config_dict, type(config_dict))
         model_args, data_args, training_args = parser.parse_dict(config_dict)
 
     logger.setLevel(log_level)
