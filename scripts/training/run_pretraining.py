@@ -216,6 +216,18 @@ def collate_fn(examples):
 
 def main(config_dict: Dict[str, Any] = None):
 
+    # Setup logging
+    log_level = logging.INFO
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%m/%d/%Y %H:%M:%S",
+        handlers=[logging.StreamHandler(sys.stdout)],
+        level=log_level,
+    )
+
+    logging.info(type(config_dict))
+    logging.info(config_dict)
+
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, CustomTrainingArguments))
     if not config_dict:
         if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
@@ -227,14 +239,6 @@ def main(config_dict: Dict[str, Any] = None):
     else:
         model_args, data_args, training_args = parser.parse_dict(config_dict)
 
-    # Setup logging
-    log_level = logging.INFO
-    logging.basicConfig(
-        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-        datefmt="%m/%d/%Y %H:%M:%S",
-        handlers=[logging.StreamHandler(sys.stdout)],
-        level=log_level,
-    )
     logger.setLevel(log_level)
     datasets.utils.logging.set_verbosity(log_level)
     transformers.utils.logging.set_verbosity(log_level)
