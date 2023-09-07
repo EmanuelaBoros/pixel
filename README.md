@@ -225,4 +225,34 @@ ImportError: /lib/x86_64-linux-gnu/libgobject-2.0.so.0: undefined symbol: ffi_ty
 
 Solution:
 `export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7`
+
+```
+sudo apt update
+sudo apt full-upgrade
+sudo apt install libcairo2-dev
+sudo apt-get install libpango1.0-dev
+sudo apt install libgirepository1.0-dev
+
+pip install pycairo PyGObject
+pip install torchvision
+pip install accelerate -U
+
+```
+Apex
+
+```
+git clone https://github.com/NVIDIA/apex
+cd apex
+# if pip >= 23.1 (ref: https://pip.pypa.io/en/stable/news/#v23-1) which supports multiple `--config-settings` with the same key... 
+pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" ./
+# otherwise
+pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+
+```
+
+
+
+
+
+
  
