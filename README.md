@@ -251,10 +251,14 @@ pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation -
 ```
 
 For preprocessing data:
-```export MASTER_ADDR=127.0.0.1
+```
+export MASTER_ADDR=127.0.0.1
 export MASTER_PORT=29500
 export WORLD_SIZE=8
-python submitit_pretrain.py   --job_dir=../experiments   --prototype_config_name=scratch_noto_span0.25-dropout_try01   --training_config_name=fp16_apex_bs32_try01   --nodes 1   --ngpus 8```
+python submitit_pretrain.py   --job_dir=../experiments   --prototype_config_name=scratch_noto_span0.25-dropout_try01   --training_config_name=fp16_apex_bs32_try01   --nodes 1   --ngpus 8
+```
+
+
 
 
 
