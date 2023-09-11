@@ -237,6 +237,9 @@ pip install pycairo PyGObject
 pip install torchvision
 pip install accelerate -U
 pip install opencv-python-headless
+pip install datasets manimpango pygame
+pip install seqeval
+
 ```
 Apex
 
