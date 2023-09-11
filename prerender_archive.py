@@ -43,8 +43,7 @@ def main(args: argparse.Namespace):
 
     # bookcorpus = load_dataset("bookcorpusopen", split="train", streaming=True)
 
-    path = f"../canonical-rebuilt-release-evenized-light/pixel/*.jsonl.bz2"
-
+    path = f"../../canonical-rebuilt-release-evenized-light/pixel/*.jsonl.bz2"
 
     logger.info(f"Indexing files in {path}")
     file_time_start = time.time()
@@ -55,7 +54,7 @@ def main(args: argparse.Namespace):
     max_pixels = text_renderer.pixels_per_patch * text_renderer.max_seq_length - 2 * text_renderer.pixels_per_patch
     target_seq_length = max_pixels
 
-
+    all_examples = 0
     idx = 0
     for book_id, book in enumerate(files):
 
@@ -66,6 +65,8 @@ def main(args: argparse.Namespace):
                 book_data.append(line)
 
         num_examples = len(book_data) #idx
+
+        all_examples += num_examples
 
         # import pdb;
         # pdb.set_trace()
@@ -122,7 +123,9 @@ def main(args: argparse.Namespace):
                 dataset_stats = push_rendered_chunk_to_hub(args, data, dataset_stats, idx)
                 data = {"pixel_values": [], "num_patches": []}
 
+        logging.info(f"Processed {all_examples}")
     logger.info(f"Total num words in archives: {dataset_stats['total_num_words']}")
+    logging.info(f"Processed {all_examples} articles.")
 
 
 if __name__ == "__main__":

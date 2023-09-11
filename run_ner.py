@@ -168,8 +168,10 @@ def log_predictions(args: argparse.Namespace, eval_dataset: NERDataset, outputs:
 
             for word in example.words:
                 if len(ex_preds) == 0 or len(ex_labels) == 0:
-                    logger.warning(f"Fewer labels than words in example {ex_id}: {' '.join(example.words)}")
-                    continue
+                    # logger.warning(f"Fewer labels than words in example {ex_id}: {' '.join(example.words)}")
+                    # continue
+                    data.append([word, label, pred])
+                    f.write(f"{word}\t{label}\t{pred}\n")
 
                 pred = label_map[ex_preds.pop(0)]
                 label = label_map[ex_labels.pop(0)]

@@ -61,6 +61,8 @@ def push_rendered_chunk_to_hub(
         # num_examples=current_num_examples,
     )
 
+    # dataset.push_to_hub(repo_id="Antreas/TALI-small", max_shard_size="5GB")
+
     dataset_stats.update(
         {
             "total_uploaded_size": 0,
