@@ -236,7 +236,7 @@ sudo apt install libgirepository1.0-dev
 pip install pycairo PyGObject
 pip install torchvision
 pip install accelerate -U
-
+pip install opencv-python-headless
 ```
 Apex
 
