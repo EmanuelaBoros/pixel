@@ -441,6 +441,7 @@ def main(rank, world_size):
         model = model.cuda(rank)
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[rank])
 
+    training_args.device = rank
     # Initialize our Trainer
     trainer = PIXELTrainer(
         model=model,
@@ -518,7 +519,6 @@ def _mp_fn(index):
 
 
 if __name__ == "__main__":
-
 
     n_gpus = torch.cuda.device_count()
     assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
