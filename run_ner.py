@@ -316,23 +316,36 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
 
     return model, config
 
-
+@dataclass
+class CustomTrainingArguments(TrainingArguments):
+    base_learning_rate: float = field(
+        default=1.5e-4, metadata={"help": "Base learning rate: absolute_lr = base_lr * total_batch_size / 256."}
+    )
 # def main(rank, world_size):
-def main():
+def main(config_dict: Dict[str, Any] = None):
 
-    # setup(rank, world_size)
-    # torch.cuda.set_device(rank)
+    # Setup logging
+    log_level = logging.INFO
+    logging.basicConfig(
+        format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+        datefmt="%m/%d/%Y %H:%M:%S",
+        handlers=[logging.StreamHandler(sys.stdout)],
+        level=log_level,
+    )
 
-    print(f"Running basic DDP example on rank {rank}.")
+    logging.info(type(config_dict))
 
-    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, PIXELTrainingArguments))
-    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-        # If we pass only one argument to the script and it's the path to a json file,
-        # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, CustomTrainingArguments))
+    if not config_dict:
+        if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
+            # If we pass only one argument to the script and it's the path to a json file,
+            # let's parse it to get our arguments.
+            model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+        else:
+            model_args, data_args, training_args = parser.parse_args_into_dataclasses()
     else:
-        model_args, data_args, training_args = parser.parse_args_into_dataclasses()
-
+        # logging.info(config_dict, type(config_dict))
+        model_args, data_args, training_args = parser.parse_dict(config_dict)
     # Setup logging
     log_level = logging.INFO
     logging.basicConfig(

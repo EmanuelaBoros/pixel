@@ -8,6 +8,8 @@ import yaml
 from transformers import HfArgumentParser
 
 from configs.config_maps import MODEL_PROTOTYPE_CONFIGS, TRAINING_CONFIGS
+from transformers import HfArgumentParser, TrainingArguments, ViTFeatureExtractor
+from typing import Any, Dict, Optional
 
 
 @dataclass
