@@ -77,13 +77,17 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 logger = logging.getLogger(__name__)
 
-def setup(rank, world_size):
-    os.environ['MASTER_ADDR'] = '127.0.0.1'
-    os.environ['MASTER_PORT'] = '29500'
+# def setup(rank, world_size):
+#     os.environ['MASTER_ADDR'] = '127.0.0.1'
+#     os.environ['MASTER_PORT'] = '29500'
+#
+#     # initialize the process group
+#     dist.init_process_group("gloo", rank=rank, world_size=world_size)
 
-    # initialize the process group
-    dist.init_process_group("gloo", rank=rank, world_size=world_size)
+import torch.nn as nn
+import torch.distributed as dist
 
+dist.init_process_group(backend='nccl', init_method='env://')
 def cleanup():
     dist.destroy_process_group()
 
@@ -312,7 +316,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
         )
         # import torch
         if torch.cuda.device_count() > 1:
-            model = nn.DataParallel(model)
+            model = nn.parallel.DistributedDataParallel(model)
     else:
         raise ValueError(f"Model type {config.model_type} not supported.")
 
@@ -321,7 +325,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
 
 def main(rank, world_size):
 
-    setup(rank, world_size)
+    # setup(rank, world_size)
     print(f"Running basic DDP example on rank {rank}.")
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, PIXELTrainingArguments))
