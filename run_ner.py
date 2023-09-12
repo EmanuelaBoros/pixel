@@ -441,7 +441,7 @@ def main(rank, world_size):
         model = model.cuda(rank)
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[rank])
 
-    training_args['device'] = rank
+    # training_args['device'] = rank
     # Initialize our Trainer
     trainer = PIXELTrainer(
         model=model,

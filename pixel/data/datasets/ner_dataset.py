@@ -217,11 +217,11 @@ def convert_examples_to_image_features(
         assert len(attention_mask) == max_seq_length
         assert len(label_ids) == max_seq_length
 
-        if ex_index < 5:
-            logger.info("*** Example ***")
-            logger.info(f"sentence: {' '.join(example.words)}")
-            logger.info(f"attention_mask: {attention_mask}")
-            logger.info(f"label_ids: {label_ids}")
+        # if ex_index < 5:
+        #     logger.info("*** Example ***")
+        #     logger.info(f"sentence: {' '.join(example.words)}")
+        #     logger.info(f"attention_mask: {attention_mask}")
+        #     logger.info(f"label_ids: {label_ids}")
 
         features.append({"pixel_values": pixel_values, "attention_mask": attention_mask, "label_ids": label_ids})
 
