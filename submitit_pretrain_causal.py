@@ -169,6 +169,7 @@ def main():
         nodes=nodes,
         timeout_min=timeout_min,  # max is 60 * 72,
         slurm_setup=[
+            "export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7",
             "export MASTER_ADDR=$(hostname -s)",
             f"export MASTER_PORT={get_port()}",
             "export WANDB_API_KEY=<redacted_api_key>"
