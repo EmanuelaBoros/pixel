@@ -49,7 +49,7 @@ class Trainer:
         self.config_dict = config_dict
 
     def __call__(self):
-        import scripts.training.run_pretraining as trainer
+        import run_ner as trainer
 
         self._setup()
         trainer.main(self.config_dict)

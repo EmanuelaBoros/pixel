@@ -308,7 +308,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
         model = AutoModelForTokenClassification.from_pretrained(
             model_args.model_name_or_path,
             config=config,
-            **config_kwargs#, device_map='auto'
+            **config_kwargs
         )
 
     else:
@@ -317,10 +317,11 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
     return model, config
 
 
+# def main(rank, world_size):
 def main(rank, world_size):
 
-    setup(rank, world_size)
-    torch.cuda.set_device(rank)
+    # setup(rank, world_size)
+    # torch.cuda.set_device(rank)
 
     print(f"Running basic DDP example on rank {rank}.")
 
@@ -436,10 +437,10 @@ def main(rank, world_size):
     data_collator = default_data_collator
 
     # import torch
-    if torch.cuda.device_count() > 1:
-        # model = nn.DataParallel(model)
-        model = model.cuda(rank)
-        model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[rank])
+    # if torch.cuda.device_count() > 1:
+    #     # model = nn.DataParallel(model)
+    #     model = model.cuda(rank)
+    #     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[rank])
 
     # training_args['device'] = rank
     # Initialize our Trainer
@@ -520,14 +521,15 @@ def _mp_fn(index):
 
 if __name__ == "__main__":
 
-    n_gpus = torch.cuda.device_count()
-    assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
-    world_size = n_gpus
-
-    rank = 0
-
-    # main(rank, world_size)
-    mp.spawn(main, nprocs=world_size, args=(world_size, ))
+    main()
+    # n_gpus = torch.cuda.device_count()
+    # assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
+    # world_size = n_gpus
+    #
+    # rank = 0
+    #
+    # # main(rank, world_size)
+    # mp.spawn(main, nprocs=world_size, args=(world_size, ))
     # run_demo(demo_checkpoint, world_size)
     # world_size = n_gpus // 2
     # run_demo(demo_model_parallel, world_size)
