@@ -19,7 +19,8 @@ import logging
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union, Any
+from transformers import HfArgumentParser, TrainingArguments, ViTFeatureExtractor
 
 import numpy as np
 import transformers
