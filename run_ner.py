@@ -52,9 +52,40 @@ from transformers import (
     set_seed, PretrainedConfig,
 )
 from transformers.trainer_utils import get_last_checkpoint, is_main_process
+import os
+import sys
+import tempfile
+import torch
+import torch.distributed as dist
+import torch.nn as nn
+import torch.optim as optim
+import torch.multiprocessing as mp
+
+from torch.nn.parallel import DistributedDataParallel as DDP
+
+# On Windows platform, the torch.distributed package only
+# supports Gloo backend, FileStore and TcpStore.
+# For FileStore, set init_method parameter in init_process_group
+# to a local file. Example as follow:
+# init_method="file:///f:/libtmp/some_file"
+# dist.init_process_group(
+#    "gloo",
+#    rank=rank,
+#    init_method=init_method,
+#    world_size=world_size)
+# For TcpStore, same way as on Linux.
 
 logger = logging.getLogger(__name__)
 
+def setup(rank, world_size):
+    os.environ['MASTER_ADDR'] = '127.0.0.1'
+    os.environ['MASTER_PORT'] = '29500'
+
+    # initialize the process group
+    dist.init_process_group("gloo", rank=rank, world_size=world_size)
+
+def cleanup():
+    dist.destroy_process_group()
 
 @dataclass
 class ModelArguments:
@@ -279,13 +310,19 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
             config=config,
             **config_kwargs#, device_map='auto'
         )
+        # import torch
+        if torch.cuda.device_count() > 1:
+            model = nn.DataParallel(model)
     else:
         raise ValueError(f"Model type {config.model_type} not supported.")
 
     return model, config
 
 
-def main():
+def main(rank, world_size):
+
+    setup(rank, world_size)
+    print(f"Running basic DDP example on rank {rank}.")
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, PIXELTrainingArguments))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
@@ -344,6 +381,9 @@ def main():
 
     # Load pretrained model
     model, config = get_model_and_config(model_args, labels)
+
+    # model = model.to(rank)
+    # model = DDP(model, device_ids=[rank])
 
     # Set modality
     modality = Modality.TEXT if model.config.model_type in ["bert", "roberta"] else Modality.IMAGE
@@ -472,4 +512,15 @@ def _mp_fn(index):
 
 
 if __name__ == "__main__":
-    main()
+
+
+    n_gpus = torch.cuda.device_count()
+    assert n_gpus >= 2, f"Requires at least 2 GPUs to run, but got {n_gpus}"
+    world_size = n_gpus
+
+    rank = 0
+
+    main(rank, world_size)
+    # run_demo(demo_checkpoint, world_size)
+    # world_size = n_gpus // 2
+    # run_demo(demo_model_parallel, world_size)
