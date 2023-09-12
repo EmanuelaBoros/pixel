@@ -5,5 +5,6 @@ MODEL_PROTOTYPE_CONFIGS = {
 
 TRAINING_CONFIGS = {
     "fp16_apex_bs32": "configs/training/fp16_apex_bs32.json",
-    "fp16_apex_bs32_try01": "configs/training/fp16_apex_bs32_try01.json"
+    "fp16_apex_bs32": "configs/training/fp16_apex_bs32.json",
+    "ner": "configs/training/ner.json"
 }
