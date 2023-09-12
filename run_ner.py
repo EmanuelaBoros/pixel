@@ -373,7 +373,7 @@ def main(config_dict: Dict[str, Any] = None):
         training_args.fp16,
     )
 
-    logger.info("Training/evaluation parameters %s", training_args)
+    # logger.info("Training/evaluation parameters %s", training_args)
 
     # Detecting last checkpoint.
     last_checkpoint = None
