@@ -314,9 +314,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
             config=config,
             **config_kwargs#, device_map='auto'
         )
-        # import torch
-        if torch.cuda.device_count() > 1:
-            model = nn.DataParallel(model)
+
     else:
         raise ValueError(f"Model type {config.model_type} not supported.")
 
@@ -438,6 +436,10 @@ def main(rank, world_size):
 
     # Data collator
     data_collator = default_data_collator
+
+    # import torch
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
 
     # Initialize our Trainer
     trainer = PIXELTrainer(
