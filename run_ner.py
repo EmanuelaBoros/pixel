@@ -319,8 +319,11 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
 
 @dataclass
 class CustomTrainingArguments(TrainingArguments):
-    base_learning_rate: float = field(
-        default=1.5e-4, metadata={"help": "Base learning rate: absolute_lr = base_lr * total_batch_size / 256."}
+    early_stopping: bool = field(
+        default=True, metadata={"help": "Base learning rate: absolute_lr = base_lr * total_batch_size / 256."}
+    ),
+    early_stopping_patience: int = field(
+        default=5, metadata={"help": "Base learning rate: absolute_lr = base_lr * total_batch_size / 256."}
     )
 # def main(rank, world_size):
 def main(config_dict: Dict[str, Any] = None):
