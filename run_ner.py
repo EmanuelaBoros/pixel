@@ -316,7 +316,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
         )
         # import torch
         if torch.cuda.device_count() > 1:
-            model = nn.parallel.DataParallel(model)
+            model = nn.DataParallel(model)
     else:
         raise ValueError(f"Model type {config.model_type} not supported.")
 
