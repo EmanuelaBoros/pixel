@@ -87,7 +87,7 @@ logger = logging.getLogger(__name__)
 import torch.nn as nn
 import torch.distributed as dist
 
-dist.init_process_group(backend='nccl', init_method='env://')
+# dist.init_process_group(backend='nccl', init_method='env://')
 def cleanup():
     dist.destroy_process_group()
 
@@ -316,7 +316,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
         )
         # import torch
         if torch.cuda.device_count() > 1:
-            model = nn.parallel.DistributedDataParallel(model)
+            model = nn.parallel.DataParallel(model)
     else:
         raise ValueError(f"Model type {config.model_type} not supported.")
 
