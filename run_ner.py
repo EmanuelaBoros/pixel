@@ -277,7 +277,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
         model = AutoModelForTokenClassification.from_pretrained(
             model_args.model_name_or_path,
             config=config,
-            **config_kwargs, device_map='auto'
+            **config_kwargs#, device_map='auto'
         )
     else:
         raise ValueError(f"Model type {config.model_type} not supported.")
