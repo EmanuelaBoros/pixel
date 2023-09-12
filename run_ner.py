@@ -318,7 +318,7 @@ def get_model_and_config(model_args: argparse.Namespace, labels: List[str]):
 
 
 # def main(rank, world_size):
-def main(rank, world_size):
+def main():
 
     # setup(rank, world_size)
     # torch.cuda.set_device(rank)
