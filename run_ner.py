@@ -527,7 +527,7 @@ if __name__ == "__main__":
     rank = 0
 
     # main(rank, world_size)
-    mp.spawn(main, nprocs=world_size, args=(rank, world_size))
+    mp.spawn(main, nprocs=world_size, args=(world_size, ))
     # run_demo(demo_checkpoint, world_size)
     # world_size = n_gpus // 2
     # run_demo(demo_model_parallel, world_size)
